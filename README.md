@@ -1,3 +1,4 @@
+#COLLAGE APP FOR MY HIGH SCHOOL (AIHS) TO CELEBRATE BIRTHDAYS
 # widget_test_for_photo_app
 
 trying different widgets needed to build AIHS photo collage app for birthday profile picture
