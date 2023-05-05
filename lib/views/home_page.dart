@@ -118,13 +118,18 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+
+    // initState(
+    //   initialization();
+    // )
+
     return WillPopScope(
       onWillPop: () async {
         return false;
       },
       child: Scaffold(
         appBar: appbar(),
-        backgroundColor: Colors.orangeAccent,
+        backgroundColor: Colors.white,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -174,7 +179,7 @@ class _HomePageState extends State<HomePage> {
                       left: 30,
                       top: 35,
                       child: CircleAvatar(
-                        backgroundColor: Colors.white,
+                        backgroundColor: Colors.transparent,
                         // backgroundImage: AssetImage(imageFile != null? '$imageFile':'assets/images/background/3_ballons.png'),
                         // backgroundImage: AssetImage('    assets/backgrounds/bg1.jpeg'),
                         radius: 100,
@@ -188,7 +193,7 @@ class _HomePageState extends State<HomePage> {
                                   fit: BoxFit.cover,
                                 )
                               : const Text(
-                                  'IMAGE',
+                                  '',
                                   style: TextStyle(
                                       color: Colors.white, letterSpacing: 2),
                                 ),
@@ -217,6 +222,7 @@ class _HomePageState extends State<HomePage> {
                     Positioned(
                       top: 241,
                       child: Container(
+                        padding: EdgeInsets.only(bottom:20),
                         color: Colors.white70,
                         height: 60,
                         width: MediaQuery.of(context).size.width,
@@ -232,10 +238,10 @@ class _HomePageState extends State<HomePage> {
                             style: const TextStyle(color: Colors.black),
                           ),
                           trailing: SizedBox(
-                              height: 90,
-                              width: 60,
+                              height: 70,
+                              width: 50,
                               child: Image.asset(
-                                'assets/backgrounds/bg1.jpeg',
+                                'assets/logo/aihs_logo.png',
                                 scale: 1,
                               )),
                         ),
@@ -412,11 +418,4 @@ SnackBar snack =  SnackBar(
   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
 );
 
-class Snack extends StatelessWidget {
-  const Snack({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Placeholder();
-  }
-}

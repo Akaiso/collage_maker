@@ -9,7 +9,7 @@ AppBar appbar(){
       child: Text('AIHS  PHOTO  APP', style: TextStyle(fontSize: 15),),
     ),
     centerTitle: true,
-    backgroundColor: Colors.orangeAccent,
+    backgroundColor: Colors.brown,
     elevation: 0,
   );
 }

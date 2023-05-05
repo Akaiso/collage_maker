@@ -7,7 +7,7 @@
 
 
     <application
-        android:label="bensonakaiso_photoedit_app"
+        android:label="AIHS"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
        android:requestLegacyExternalStorage="true">

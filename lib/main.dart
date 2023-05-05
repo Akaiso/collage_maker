@@ -1,10 +1,14 @@
  import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:widget_test_for_photo_app/routes.dart';
 import 'package:widget_test_for_photo_app/views/home_page.dart';
 
 
-void main(){
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Future.delayed(const Duration(seconds: 4));
+  FlutterNativeSplash.remove();
   runApp(MyPhotoApp());
 }
 
