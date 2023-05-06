@@ -132,7 +132,7 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.white,
         body: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
@@ -176,8 +176,8 @@ class _HomePageState extends State<HomePage> {
                         )),
 
                     Positioned(
-                      left: 30,
-                      top: 35,
+                      left: 10,
+                      top: 33,
                       child: CircleAvatar(
                         backgroundColor: Colors.transparent,
                         // backgroundImage: AssetImage(imageFile != null? '$imageFile':'assets/images/background/3_ballons.png'),
@@ -222,7 +222,6 @@ class _HomePageState extends State<HomePage> {
                     Positioned(
                       top: 241,
                       child: Container(
-                        padding: EdgeInsets.only(bottom:20),
                         color: Colors.white70,
                         height: 60,
                         width: MediaQuery.of(context).size.width,
@@ -237,23 +236,27 @@ class _HomePageState extends State<HomePage> {
                             date,
                             style: const TextStyle(color: Colors.black),
                           ),
-                          trailing: SizedBox(
-                              height: 70,
-                              width: 50,
-                              child: Image.asset(
-                                'assets/logo/aihs_logo.png',
-                                scale: 1,
-                              )),
+                          trailing: Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: SizedBox(
+                                height: 70,
+                                width: 60,
+                                child: Image.asset(
+                                  'assets/logo/aihs_logo_2.png',
+                                  scale: 1,
+                                )),
+                          ),
                         ),
                       ),
                     )
                   ]),
                 ),
               ),
+             // SizedBox(height: 20,),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -390,14 +393,17 @@ class _HomePageState extends State<HomePage> {
                             ),
                           );
                         }),
-                        button('DONE', () async {
-                          requestPermission();
-                          _save();
-                          ScaffoldMessenger.of(context).showSnackBar(snack);
+                        button('DECOR', () {
+
                         })
                       ],
                     ),
-                    // SizedBox(height: 30,)
+                    SizedBox(height: 10,),
+                    button('DONE', () async {
+                      requestPermission();
+                      _save();
+                      ScaffoldMessenger.of(context).showSnackBar(snack);
+                    })
                   ],
                 ),
               )
