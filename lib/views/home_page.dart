@@ -10,6 +10,8 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:widget_test_for_photo_app/components/appbar.dart';
+import 'package:widget_test_for_photo_app/models/decoration_model.dart';
+import '../views/decoration_list.dart';
 import 'package:widget_test_for_photo_app/models/image_model.dart';
 
 import '../components/buttons.dart';
@@ -23,15 +25,16 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   File? imageFile;
-  Widget selectedImage = Container();
+  //Widget selectedImage = Container();
   TextEditingController nameController = TextEditingController();
   TextEditingController dateController = TextEditingController();
-  String name = 'Add name';
-  String date = 'Add birthday date';
+  String name = 'Name:';
+  String date = 'Date:';
   String headline = 'FABULOUS AIHS (2001 SET) CELEBRATES YOU';
   GlobalKey globalKey = GlobalKey();
 
   bool statusCheck = false;
+  bool status1Check = false;
 
   Future requestPermission() async {
     var status = await Permission.storage.status;
@@ -45,6 +48,9 @@ class _HomePageState extends State<HomePage> {
     var status1 = await Permission.storage.status;
     if (!status1.isGranted) {
       await Permission.manageExternalStorage.request();
+    }
+    if(status1.isGranted){
+      status1Check = true;
     }
   }
 
@@ -91,7 +97,8 @@ class _HomePageState extends State<HomePage> {
   Future pickImageFromGallery() async {
     try {
       final imageFile = (await ImagePicker().pickImage(
-          source: ImageSource.gallery, maxWidth: 200, maxHeight: 200));
+        //the maxwidth and maxheight determines the quality of Image picked. higher values means "sharper" image
+          source: ImageSource.gallery, maxWidth: 1000, maxHeight: 1000));
       if (imageFile == null) return;
       final imageTemp = File(imageFile.path);
       setState(() {
@@ -131,283 +138,299 @@ class _HomePageState extends State<HomePage> {
         appBar: appbar(),
         backgroundColor: Colors.white,
         body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                height: MediaQuery.of(context).size.height * 0.4,
-                color: Colors.black,
-                child: RepaintBoundary(
-                  key: globalKey,
-                  child: Stack(fit: StackFit.passthrough, children: [
-                    background.isEmpty
-                        ? const Center(
-                            child: Text(
-                              'ADD CONTENT HERE',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          )
-                        : updateContentList(),
-                    // imageFile != null
-                    //     ? Image.file(imageFile!)
-                    //     : const Text(
-                    //         '',
-                    //         style: TextStyle(color: Colors.white),
-                    //    ),
-                    Positioned(
-                        left: 7,
-                        top: 5,
-                        child: Container(
-                          height: 20,
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.black54),
-                          child: Center(
-                            child: Text(
-                              headline,
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                  letterSpacing: 2),
-                            ),
-                          ),
-                        )),
-
-                    Positioned(
-                      left: 10,
-                      top: 33,
-                      child: CircleAvatar(
-                        backgroundColor: Colors.transparent,
-                        // backgroundImage: AssetImage(imageFile != null? '$imageFile':'assets/images/background/3_ballons.png'),
-                        // backgroundImage: AssetImage('    assets/backgrounds/bg1.jpeg'),
-                        radius: 100,
-                        //  child: ClipRRect(borderRadius: BorderRadius.circular(100),clipBehavior: Clip.hardEdge,
-                        child: ClipOval(
-                          child: imageFile != null
-                              ? Image.file(
-                                  imageFile!,
-                                  height: 300,
-                                  width: 300,
-                                  fit: BoxFit.cover,
-                                )
-                              : const Text(
-                                  '',
-                                  style: TextStyle(
-                                      color: Colors.white, letterSpacing: 2),
-                                ),
-                        ),
-                        // child: ClipOval(
-                        //   child:     imageFile != null
-                        //       ? Image.file(imageFile!,height: 300,width: 300,fit: BoxFit.cover,)
-                        //       : const Text(
-                        //     'IMAGE',
-                        //     style: TextStyle(
-                        //         color: Colors.white, letterSpacing: 2),
-                        //   ),
-                        // ),
-
-                        //Text('image')
-                        // imageFile != null
-                        //     ? Image.file(imageFile!)
-                        //     : const Text(
-                        //         'IMAGE',
-                        //         style: TextStyle(
-                        //             color: Colors.white, letterSpacing: 2),
-                        //       ),
-                      ),
-                    ),
-
-                    Positioned(
-                      top: 241,
-                      child: Container(
-                        color: Colors.white70,
-                        height: 60,
-                        width: MediaQuery.of(context).size.width,
-                        child: ListTile(
-                          title: Text(
-                            name,
-                            style: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500),
-                          ),
-                          subtitle: Text(
-                            date,
-                            style: const TextStyle(color: Colors.black),
-                          ),
-                          trailing: Padding(
-                            padding: const EdgeInsets.only(bottom: 10),
-                            child: SizedBox(
-                                height: 70,
-                                width: 60,
-                                child: Image.asset(
-                                  'assets/logo/aihs_logo_2.png',
-                                  scale: 1,
-                                )),
-                          ),
-                        ),
-                      ),
-                    )
-                  ]),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Text('Follow these steps for best experience: background>decor>addtext>image>done', style: TextStyle(color: Colors.red, fontSize: 11),),
                 ),
-              ),
-             // SizedBox(height: 20,),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        button('BACKGROUND', () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => Dialog(
-                              child: Container(
-                                color: Colors.orangeAccent,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.2,
-                                child: Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      button('ADD', () {
-                                        //this will prevent the modal from showing again after tapping back on the imageList Screen
-                                        //  Navigator.pop(context);
-                                        Navigator.pushReplacementNamed(
-                                            context, '/imageList');
-                                      }),
-                                      button('REMOVE', () {
-                                        removeBgContent();
-                                        // Navigator.pushReplacementNamed(context, "/");
-                                      })
-                                    ],
-                                  ),
-                                ),
+                SizedBox(height: 10,),
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.4,
+                  color: Colors.black,
+                  child: RepaintBoundary(
+                    key: globalKey,
+                    child: Stack(fit: StackFit.passthrough, children: [
+                      background.isEmpty
+                          ? const Center(
+                              child: Text(
+                                'ADD CONTENT HERE',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            )
+                          : updateContentList(),
+                      // imageFile != null
+                      //     ? Image.file(imageFile!)
+                      //     : const Text(
+                      //         '',
+                      //         style: TextStyle(color: Colors.white),
+                      //    ),
+                      Positioned(
+                          left: 7,
+                          top: 5,
+                          child: Container(
+                            height: 20,
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.black54),
+                            child: Center(
+                              child: Text(
+                                headline,
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    letterSpacing: 2),
                               ),
                             ),
-                          );
-                        }),
-                        button('IMAGE', () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => Dialog(
-                              child: Container(
-                                color: Colors.orangeAccent,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.2,
-                                child: Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      button('GALLERY', () async {
-                                        //this will prevent the modal from showing again after tapping back on the imageList Screen
-                                        //  Navigator.pushReplacementNamed(context, '/');
-                                        Navigator.pop(context);
-                                        pickImageFromGallery();
-                                        //  Navigator.pushNamed(context, '/');
-                                      }),
-                                      button('CAMERA', () {
-                                        Navigator.pop(context);
-                                        pickImageFromCamera();
-                                      }),
-                                      button('REMOVE', () {
-                                        Navigator.pushReplacementNamed(
-                                            context, "/");
-                                      })
-                                    ],
+                          )),
+
+                      Positioned(
+                        left: 10,
+                        top: 33,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.transparent,
+                          // backgroundImage: AssetImage(imageFile != null? '$imageFile':'assets/images/background/3_ballons.png'),
+                          // backgroundImage: AssetImage('    assets/backgrounds/bg1.jpeg'),
+                          radius: 100,
+                          //  child: ClipRRect(borderRadius: BorderRadius.circular(100),clipBehavior: Clip.hardEdge,
+                          child: ClipOval(
+                            child: imageFile != null
+                                ? Image.file(
+                                    imageFile!,
+                                    height: 300,
+                                    width: 300,
+                                    fit: BoxFit.cover,
+                                  )
+                                : const Text(
+                                    '',
+                                    style: TextStyle(
+                                        color: Colors.white, letterSpacing: 2),
                                   ),
-                                ),
-                              ),
+                          ),
+                          // child: ClipOval(
+                          //   child:     imageFile != null
+                          //       ? Image.file(imageFile!,height: 300,width: 300,fit: BoxFit.cover,)
+                          //       : const Text(
+                          //     'IMAGE',
+                          //     style: TextStyle(
+                          //         color: Colors.white, letterSpacing: 2),
+                          //   ),
+                          // ),
+
+                          //Text('image')
+                          // imageFile != null
+                          //     ? Image.file(imageFile!)
+                          //     : const Text(
+                          //         'IMAGE',
+                          //         style: TextStyle(
+                          //             color: Colors.white, letterSpacing: 2),
+                          //       ),
+                        ),
+                      ),
+
+                      Positioned(
+                        top: 241,
+                        child: Container(
+                          color: Colors.white70,
+                          height: 60,
+                          width: MediaQuery.of(context).size.width,
+                          child: ListTile(
+                            title: Text(
+                              name,
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500),
                             ),
-                          );
-                        })
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        button('ADD TEXT', () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => Dialog(
-                              child: Container(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                color: Colors.orangeAccent,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.2,
-                                child: Form(
+                            subtitle: Text(
+                              date,
+                              style: const TextStyle(color: Colors.black),
+                            ),
+                            trailing: Padding(
+                              padding: const EdgeInsets.only(bottom: 10),
+                              child: SizedBox(
+                                  height: 70,
+                                  width: 60,
+                                  child: Image.asset(
+                                    'assets/logo/aihs_logo_2.png',
+                                    scale: 1,
+                                  )),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                          top: 150,
+                          child: Container(
+                              height: 100,
+                               width: MediaQuery.of(context).size.width,
+                              child: decorationContainer.isEmpty? Text(''): decorationContainer.last)),
+                    ]),
+                  ),
+                ),
+                SizedBox(height: 30,),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          button('BACKGROUND', () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => Dialog(
+                                child: Container(
+                                  color: Colors.orangeAccent,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.2,
                                   child: Center(
                                     child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        SizedBox(
-                                          height: 35,
-                                          child: Center(
-                                            child: TextFormField(
-                                              controller: nameController,
-                                              decoration: InputDecoration(
-                                                hintText: 'Name',
-                                                contentPadding:
-                                                    const EdgeInsets.all(10),
-                                                border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 35,
-                                          child: Center(
-                                            child: TextFormField(
-                                              controller: dateController,
-                                              decoration: InputDecoration(
-                                                  hintText: 'Date',
-                                                  contentPadding:
-                                                      const EdgeInsets.all(10),
-                                                  border: OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10))),
-                                            ),
-                                          ),
-                                        ),
-                                        button('SUBMIT', () {
-                                          name = nameController.text;
-                                          date = dateController.text;
-                                          nameController.clear();
-                                          dateController.clear();
-                                          Navigator.pop(context);
+                                        button('ADD', () {
+                                          //this will prevent the modal from showing again after tapping back on the imageList Screen
+                                          //  Navigator.pop(context);
+                                          Navigator.pushReplacementNamed(
+                                              context, '/imageList');
                                         }),
+                                        button('REMOVE', () {
+                                          removeBgContent();
+                                          // Navigator.pushReplacementNamed(context, "/");
+                                        })
                                       ],
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          );
-                        }),
-                        button('DECOR', () {
-
-                        })
-                      ],
-                    ),
-                    SizedBox(height: 10,),
-                    button('DONE', () async {
-                      requestPermission();
-                      _save();
-                      ScaffoldMessenger.of(context).showSnackBar(snack);
-                    })
-                  ],
-                ),
-              )
-            ],
+                            );
+                          }),
+                          button('DECOR', () {
+                            Navigator.pushNamed(context, '/decorList');
+                          }),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          button('ADD TEXT', () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => Dialog(
+                                child: Container(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 10),
+                                  color: Colors.orangeAccent,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.2,
+                                  child: Form(
+                                    child: Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          SizedBox(
+                                            height: 35,
+                                            child: Center(
+                                              child: TextFormField(
+                                                controller: nameController,
+                                                decoration: InputDecoration(
+                                                  hintText: 'Name',
+                                                  contentPadding:
+                                                      const EdgeInsets.all(10),
+                                                  border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(10),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 35,
+                                            child: Center(
+                                              child: TextFormField(
+                                                controller: dateController,
+                                                decoration: InputDecoration(
+                                                    hintText: 'Date',
+                                                    contentPadding:
+                                                        const EdgeInsets.all(10),
+                                                    border: OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                10))),
+                                              ),
+                                            ),
+                                          ),
+                                          button('SUBMIT', () {
+                                            name = nameController.text;
+                                            date = dateController.text;
+                                            nameController.clear();
+                                            dateController.clear();
+                                            Navigator.pop(context);
+                                          }),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }),
+                          button('IMAGE', () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => Dialog(
+                                child: Container(
+                                  color: Colors.orangeAccent,
+                                  height:
+                                  MediaQuery.of(context).size.height * 0.2,
+                                  child: Center(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        button('GALLERY', () async {
+                                          //this will prevent the modal from showing again after tapping back on the imageList Screen
+                                          //  Navigator.pushReplacementNamed(context, '/');
+                                          Navigator.pop(context);
+                                          pickImageFromGallery();
+                                          //  Navigator.pushNamed(context, '/');
+                                        }),
+                                        button('CAMERA', () {
+                                          Navigator.pop(context);
+                                          pickImageFromCamera();
+                                        }),
+                                        button('REMOVE', () {
+                                          Navigator.pushReplacementNamed(
+                                              context, "/");
+                                        })
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          })
+                        ],
+                      ),
+                      SizedBox(height: 10,),
+                      button('DONE', () async {
+                        requestPermission();
+                        _save();
+                        status1Check?
+                        ScaffoldMessenger.of(context).showSnackBar(snack):
+                        ScaffoldMessenger.of(context).showSnackBar(snack2)
+                        ;
+                      }),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -417,6 +440,15 @@ class _HomePageState extends State<HomePage> {
 
 SnackBar snack =  SnackBar(
   content: const Text('Image saved to gallery'),
+  behavior: SnackBarBehavior.floating,
+  duration: const Duration(milliseconds: 1000),
+  elevation: 5,
+  margin: const EdgeInsets.only(left: 5, right: 20, bottom: 10),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+);
+
+SnackBar snack2 =  SnackBar(
+  content: const Text('Allow AIHS to have access'),
   behavior: SnackBarBehavior.floating,
   duration: const Duration(milliseconds: 1000),
   elevation: 5,
