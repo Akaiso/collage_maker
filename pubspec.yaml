@@ -41,6 +41,7 @@ dependencies:
   permission_handler: ^10.2.0
   image_gallery_saver: ^1.7.1
   flutter_native_splash: ^2.2.18
+  flutter_svg: ^1.1.6
 
 
 dev_dependencies:

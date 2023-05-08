@@ -5,6 +5,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
@@ -58,7 +59,7 @@ class _HomePageState extends State<HomePage> {
     await requestPermission();
     RenderRepaintBoundary boundary =
         globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
-    ui.Image image = await boundary.toImage();
+    ui.Image image = await boundary.toImage(pixelRatio: 3);
     ByteData? byteData = await (image.toByteData(format: ui.ImageByteFormat.png)
         as FutureOr<ByteData?>);
     if (byteData != null) {
@@ -98,7 +99,7 @@ class _HomePageState extends State<HomePage> {
     try {
       final imageFile = (await ImagePicker().pickImage(
         //the maxwidth and maxheight determines the quality of Image picked. higher values means "sharper" image
-          source: ImageSource.gallery, maxWidth: 1000, maxHeight: 1000));
+          source: ImageSource.gallery, maxWidth: 2000, maxHeight: 2000));
       if (imageFile == null) return;
       final imageTemp = File(imageFile.path);
       setState(() {
@@ -254,9 +255,9 @@ class _HomePageState extends State<HomePage> {
                               child: SizedBox(
                                   height: 70,
                                   width: 60,
-                                  child: Image.asset(
-                                    'assets/logo/aihs_logo_2.png',
-                                    scale: 1,
+                                  child: SvgPicture.asset(
+                                    'assets/logo/aihs_logo_svg.svg',fit: BoxFit.contain,
+                                    //scale: 1,
                                   )),
                             ),
                           ),
